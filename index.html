@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>کافه نوآر | منوی دیجیتال</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&family=Vazirmatn:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#15100c;
+    --surface:#1f1712;
+    --surface-2:#241b15;
+    --gold:#c6a15b;
+    --gold-soft:#8a733f;
+    --cream:#f0e6d6;
+    --cream-dim:#c9beac;
+    --rose:#b2695c;
+    --line: rgba(198,161,91,0.22);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--cream);
+    font-family:'Vazirmatn', sans-serif;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--gold); color:#15100c;}
+
+  /* subtle marble/noise texture */
+  .texture{
+    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.5;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% -10%, rgba(198,161,91,0.08), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 20%, rgba(178,105,92,0.06), transparent 60%);
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding:32px;
+    z-index:1;
+  }
+  .emblem{
+    width:64px; height:64px; margin-bottom:28px;
+    position:relative;
+  }
+  .emblem svg{ width:100%; height:100%; }
+  .emblem .ring{
+    stroke:var(--gold);
+    stroke-width:1;
+    fill:none;
+    stroke-dasharray:220;
+    stroke-dashoffset:220;
+    animation:draw 2.4s ease forwards 0.3s;
+  }
+  .emblem .bean{ fill:var(--gold); opacity:0; animation:fadeIn 1s ease forwards 1.8s; }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+  @keyframes fadeIn{ to{ opacity:1; } }
+
+  .hero-eyebrow{
+    font-size:12px; letter-spacing:0.35em; color:var(--gold);
+    margin-bottom:18px; opacity:0; animation:riseIn 0.9s ease forwards 0.6s;
+  }
+  .hero h1{
+    font-family:'Noto Naskh Arabic', serif;
+    font-weight:700;
+    font-size:clamp(48px, 11vw, 96px);
+    line-height:1.15;
+    color:var(--cream);
+    opacity:0; animation:riseIn 1s ease forwards 0.9s;
+  }
+  .hero h1 span{ color:var(--gold); }
+  .hero-tag{
+    margin-top:22px; max-width:440px;
+    font-size:15px; line-height:2; color:var(--cream-dim); font-weight:300;
+    opacity:0; animation:riseIn 1s ease forwards 1.3s;
+  }
+  @keyframes riseIn{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+
+  .hero-line{
+    width:1px; height:70px; background:linear-gradient(var(--gold), transparent);
+    margin-top:44px;
+    opacity:0; animation:fadeIn 1s ease forwards 1.9s;
+  }
+  .scroll-cue{
+    margin-top:14px; font-size:11px; letter-spacing:0.2em; color:var(--gold-soft);
+    opacity:0; animation:fadeIn 1s ease forwards 2.1s;
+  }
+
+  /* ---------- NAV ---------- */
+  .catnav{
+    position:sticky; top:0; z-index:20;
+    background:rgba(21,16,12,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    display:flex; gap:8px; padding:16px 20px;
+    overflow-x:auto;
+    -ms-overflow-style:none; scrollbar-width:none;
+  }
+  .catnav::-webkit-scrollbar{ display:none; }
+  .cat-btn{
+    flex:0 0 auto;
+    font-family:'Vazirmatn'; font-size:13.5px; font-weight:500;
+    color:var(--cream-dim);
+    background:transparent;
+    border:1px solid var(--line);
+    padding:9px 20px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:all 0.35s ease;
+    white-space:nowrap;
+  }
+  .cat-btn:hover{ color:var(--cream); border-color:var(--gold-soft); }
+  .cat-btn.active{
+    color:#15100c; background:var(--gold); border-color:var(--gold);
+    font-weight:600;
+  }
+
+  /* ---------- SECTIONS ---------- */
+  .menu-wrap{ max-width:760px; margin:0 auto; padding:80px 24px 40px; position:relative; z-index:1;}
+  .section{ margin-bottom:88px; }
+  .section-head{
+    display:flex; align-items:baseline; gap:16px; margin-bottom:6px;
+    opacity:0; transform:translateY(16px);
+    transition:all 0.8s cubic-bezier(.2,.7,.2,1);
+  }
+  .section-head.in{ opacity:1; transform:translateY(0); }
+  .section-head h2{
+    font-family:'Noto Naskh Arabic', serif; font-weight:700;
+    font-size:28px; color:var(--gold);
+  }
+  .section-head .fa-count{ font-size:12px; color:var(--gold-soft); letter-spacing:0.1em; }
+  .section-desc{
+    font-size:13px; color:var(--cream-dim); font-weight:300; margin-bottom:32px;
+    padding-right:2px;
+  }
+
+  .item{
+    display:flex; align-items:flex-start; gap:14px;
+    padding:18px 4px;
+    border-bottom:1px dashed var(--line);
+    cursor:pointer;
+    opacity:0; transform:translateY(18px);
+    transition:opacity 0.7s ease, transform 0.7s ease, background 0.3s ease;
+  }
+  .item.in{ opacity:1; transform:translateY(0); }
+  .item:hover{ background:rgba(198,161,91,0.05); }
+  .item:last-child{ border-bottom:none; }
+
+  .item-icon{
+    width:38px; height:38px; flex:0 0 38px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold);
+    font-size:16px;
+    margin-top:2px;
+  }
+  .item-body{ flex:1; min-width:0; }
+  .item-top{ display:flex; align-items:baseline; gap:10px; }
+  .item-name{ font-size:16.5px; font-weight:600; color:var(--cream); }
+  .leader{
+    flex:1;
+    border-bottom:1px dotted var(--gold-soft);
+    height:0; margin-bottom:6px; opacity:0.55;
+  }
+  .item-price{ font-size:15px; color:var(--gold); font-weight:600; white-space:nowrap; }
+  .item-desc{
+    margin-top:6px; font-size:13px; color:var(--cream-dim); font-weight:300; line-height:1.9;
+  }
+
+  /* ---------- MODAL ---------- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(10,7,5,0.72);
+    backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center;
+    z-index:100; opacity:0; pointer-events:none;
+    transition:opacity 0.35s ease;
+    padding:24px;
+  }
+  .overlay.show{ opacity:1; pointer-events:auto; }
+  .modal{
+    background:var(--surface); border:1px solid var(--line);
+    max-width:420px; width:100%;
+    padding:36px 30px 30px;
+    border-radius:4px;
+    position:relative;
+    transform:translateY(24px) scale(0.97); opacity:0;
+    transition:all 0.4s cubic-bezier(.2,.8,.2,1);
+    text-align:center;
+  }
+  .overlay.show .modal{ transform:translateY(0) scale(1); opacity:1; }
+  .modal-icon{
+    width:56px; height:56px; margin:0 auto 20px;
+    border-radius:50%; border:1px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold); font-size:22px;
+  }
+  .modal h3{ font-family:'Noto Naskh Arabic', serif; font-size:24px; color:var(--cream); margin-bottom:10px; }
+  .modal .modal-price{ color:var(--gold); font-size:16px; font-weight:600; margin-bottom:18px; }
+  .modal p{ font-size:13.5px; color:var(--cream-dim); line-height:2; font-weight:300; }
+  .modal-close{
+    position:absolute; top:16px; left:16px;
+    width:28px; height:28px; border-radius:50%;
+    border:1px solid var(--line); background:transparent; color:var(--cream-dim);
+    cursor:pointer; font-size:14px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    transition:all 0.25s ease;
+  }
+  .modal-close:hover{ border-color:var(--gold); color:var(--gold); }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    text-align:center; padding:60px 24px 50px;
+    border-top:1px solid var(--line);
+    position:relative; z-index:1;
+  }
+  footer .fname{ font-family:'Noto Naskh Arabic', serif; color:var(--gold); font-size:20px; margin-bottom:12px; }
+  footer p{ font-size:12.5px; color:var(--cream-dim); font-weight:300; line-height:2; }
+
+  @media (max-width:480px){
+    .hero h1{ font-size:44px; }
+    .item-name{ font-size:15px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="texture"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="emblem">
+    <svg viewBox="0 0 64 64">
+      <circle class="ring" cx="32" cy="32" r="28"/>
+      <path class="bean" d="M32 18c-8 0-14 6.5-14 14s6 14 14 14 14-6.5 14-14-6-14-14-14zm0 4c1.2 3 1.2 17 0 20-4.8-1.8-8-6.2-8-10s3.2-8.2 8-10z"/>
+    </svg>
+  </div>
+  <div class="hero-eyebrow">C A F É   N O I R</div>
+  <h1>کافه <span>نوآر</span></h1>
+  <p class="hero-tag">دانه‌های تک‌خاستگاه، دم‌آوری دست‌ساز و لحظه‌ای آرام در دل شهر — منوی ما را با یک لمس ورق بزنید</p>
+  <div class="hero-line"></div>
+  <div class="scroll-cue">برای مشاهده‌ی منو پایین بروید ↓</div>
+</section>
+
+<!-- CATEGORY NAV -->
+<nav class="catnav" id="catnav">
+  <button class="cat-btn active" data-target="cat-espresso">اسپرسو بیس</button>
+  <button class="cat-btn" data-target="cat-brew">دمی و چای</button>
+  <button class="cat-btn" data-target="cat-cold">سرد و ویژه</button>
+  <button class="cat-btn" data-target="cat-dessert">دسرها</button>
+</nav>
+
+<div class="menu-wrap">
+
+  <!-- ESPRESSO -->
+  <div class="section" id="cat-espresso">
+    <div class="section-head"><h2>اسپرسو بیس</h2><span class="fa-count">— ۰۱</span></div>
+    <div class="section-desc">برشته‌کاری تازه، عصاره‌گیری دقیق، بافتی مخملی</div>
+
+    <div class="item" data-name="اسپرسو دوبل" data-price="۸۵,۰۰۰ تومان" data-desc="شات غلیظ از دانه‌ی تک‌خاستگاه اتیوپی، برشته‌شده در همان هفته و عصاره‌گیری‌شده در ۲۵ ثانیه برای بیشترین شفافیت طعم.">
+      <div class="item-icon">☕</div>
+      <div class="item-body">
+        <div class="item-top"><span class="item-name">اسپرسو دوبل</span><span class="leader"></span><span class="item-price">۸۵,۰۰۰</span></div>
+        <div class="item-desc">دانه‌ی تک‌خاستگاه اتیوپی، برشته‌کاری تازه</div>
+      </div>
+    </div>
+
+    <div class="item" data-name="کاپوچینو کلاسیک" data-price="۱۱۰,۰۰۰ تومان" data-desc="فومی مخملی و پایدار روی اسپرسو ایتالیایی، با نسبت کلاسیک شیر و کف که در دهان به آرامی باز می‌شود.">
+      <div class="item-icon">◐</div>
+      <div class="item-body">
+        <div class="item-top"><span class="item-name">کاپوچینو کلاسیک</span><span class="leader"></span><span class="item-price">۱۱۰,۰۰۰</span></div>
+        <div class="item-desc">فوم مخملی روی اسپرسو ایتالیایی</div>
+      </div>
+    </div>
+
+    <div class="item" data-name="فلت‌وایت نوآر" data-price="۱۲۵,۰۰۰ تومان" data-desc="ریسیو دوبل با شیر بخاردیده به سبک خانه‌ی ما؛ متراکم‌تر از لاته، ملایم‌تر از اسپرسو خالص.">
+      <div class="item-icon">◑</div>
+      <div class="item-body">
+        <div class="item-top"><span class="item-name">فلت‌وایت نوآر</span><span class="leader"></span><span class="item-price">۱۲۵,۰۰۰</span></div>
+        <div class="item-desc">ریسیو دوبل با شیر بخاردیده، امضای خانه</div>
+      </div>
+    </div>
+
+    <div class="item" data-name="موکای دارک شکلات" data-price="۱۴۵,۰۰۰ تومان" data-desc="ذوب شکلات تلخ ۷۰٪ بلژیکی با اسپرسو داغ و لایه‌ای از کرم غلیظ؛ تعادلی میان تلخی و شیرینی.">
+      <div class="item-icon">◒</div>
+      <div class="item-body">
+        <div class="item-top"><span class="item-name">موکای دارک شکلات</span><span class="leader"></span><span class="item-price">۱۴۵,۰۰۰</span></div>
+        <div class="item-desc">شکلات تلخ بلژیکی، کرم غلیظ دست‌ساز</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BREW -->
+  <div class="section" id="cat-brew">
+    <div class="section-head"><h2>دمی و چای</h2><span class="fa-count">— ۰۲</span></div>
+    <div class="section-desc">آیین آرام دم‌آوری، برای لحظه‌های کند و آگاهانه</div>
+
+    <div class="item" data-name="دمی وی۶۰ — یرگاچف" data-price="۱۶۰,۰۰۰ تومان" data-desc="دم‌آوری دستی با روش وی۶۰ از دانه‌ی یرگاچف اتیوپی؛ نت‌های گل‌محمدی و مرکبات در فنجان شما نمایان می‌شود.">
+      <div class="item-icon">◇</div>
+      <div class="item-body">
+        <div class="item-top"><span class="item-name">دمی وی۶۰ — یرگاچف</span><span class="leader"></span><span class="item-price">۱۶۰,۰۰۰</span></div>
+        <div class="item-desc">دم‌آوری دستی، نت‌های گل‌محمدی و مرکبات</div>
+      </div>
+    </div>
+
+    <div class="item" data-name="چای سیاه دارجیلینگ" data-price="۹۵,۰۰۰ تومان" data-desc="برگ‌های دست‌چین از باغ‌های دارجیلینگ، دم‌کشیده در قوری چینی برای رهاسازی کامل عطر.">
+      <div class="item-icon">◈</div>
+      <div class="item-body">
+        <div class="item-top"><span class="item-name">چای سیاه دارجیلینگ</span><span class="leader"></span><span class="item-price">۹۵,۰۰۰</span></div>
+        <div class="item-desc">برگ دست‌چین، دم‌کشیده در قوری چینی</div>
+      </div>
+    </div>
+
+    <div class="item" data-name="چای سبز یاسمن" data-price="۹۰,۰۰۰ تومان" data-desc="چای سبز معطر شده با گلبرگ‌های یاسمن؛ ملایم، خنک‌کننده و آرامش‌بخش.">
+      <div class="item-icon">❀</div>
+      <div class="item-body">
+        <div class="item-top"><span class="item-name">چای سبز یاسمن</span><span class="leader"></span><span class="item-price">۹۰,۰۰۰</span></div>
+        <div class="item-desc">معطر با گلبرگ یاسمن، ملایم و آرام‌بخش</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLD -->
+  <div class="section" id="cat-cold">
+    <div class="section-head"><h2>سرد و ویژه</h2><span class="fa-count">— ۰۳</span></div>
+    <div class="section-desc">برای روزهای گرم و لحظه‌های خاص</div>
+
+    <div class="item" data-name="آیس لاته وانیل ماداگاسکار" data-price="۱۳۵,۰۰۰ تومان" data-desc="اسپرسو سرد شده روی یخ با شیر و عصاره‌ی وانیل واقعی ماداگاسکار؛ شیرینی طبیعی بدون شربت مصنوعی.">
+      <div class="item-icon">❆</div>
+      <div class="item-body">
+        <div class="item-top"><span class="item-name">آیس لاته وانیل ماداگاسکار</span><span class="leader"></span><span class="item-price">۱۳۵,۰۰۰</span></div>
+        <div class="item-desc">وانیل واقعی، شیرینی طبیعی</div>
+      </div>
+    </div>
+
+    <div class="item" data-name="کولد برو ۱۲ ساعته" data-price="۱۴۰,۰۰۰ تومان" data-desc="دم‌آوری سرد به مدت ۱۲ ساعت با آب سرد؛ نتیجه‌اش نوشیدنی نرم، کم‌اسید و با کافئینی متمرکز است.">
+      <div class="item-icon">◍</div>
+      <div class="item-body">
+        <div class="item-top"><span class="item-name">کولد برو ۱۲ ساعته</span><span class="leader"></span><span class="item-price">۱۴۰,۰۰۰</span></div>
+        <div class="item-desc">دم‌آوری سرد ۱۲ ساعته، نرم و کم‌اسید</div>
+      </div>
+    </div>
+
+    <div class="item" data-name="افاگاتو نوآر" data-price="۱۶۵,۰۰۰ تومان" data-desc="یک شات اسپرسو داغ ریخته‌شده روی گوی بستنی وانیل درجه‌یک؛ تضاد گرما و سرما در یک نگاه.">
+      <div class="item-icon">◔</div>
+      <div class="item-body">
+        <div class="item-top"><span class="item-name">افاگاتو نوآر</span><span class="leader"></span><span class="item-price">۱۶۵,۰۰۰</span></div>
+        <div class="item-desc">اسپرسو داغ روی بستنی وانیل درجه‌یک</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESSERT -->
+  <div class="section" id="cat-dessert">
+    <div class="section-head"><h2>دسرها</h2><span class="fa-count">— ۰۴</span></div>
+    <div class="section-desc">شیرینی‌های دست‌ساز، تازه‌ی همان روز</div>
+
+    <div class="item" data-name="تیرامیسوی خانگی" data-price="۱۸۵,۰۰۰ تومان" data-desc="لایه‌های ملایم ماسکارپونه و بیسکویت آغشته به اسپرسو، پودر شده با کاکائوی تلخ؛ دستور خانگی و بدون ژلاتین.">
+      <div class="item-icon">▧</div>
+      <div class="item-body">
+        <div class="item-top"><span class="item-name">تیرامیسوی خانگی</span><span class="leader"></span><span class="item-price">۱۸۵,۰۰۰</span></div>
+        <div class="item-desc">ماسکارپونه و بیسکویت آغشته به اسپرسو</div>
+      </div>
+    </div>
+
+    <div class="item" data-name="چیزکیک تمشک" data-price="۱۷۵,۰۰۰ تومان" data-desc="پنیر خامه‌ای فرانسوی روی خمیر بیسکویت کره‌ای، با سس تمشک تازه و ترش‌وشیرین.">
+      <div class="item-icon">▨</div>
+      <div class="item-body">
+        <div class="item-top"><span class="item-name">چیزکیک تمشک</span><span class="leader"></span><span class="item-price">۱۷۵,۰۰۰</span></div>
+        <div class="item-desc">پنیر خامه‌ای فرانسوی، سس تمشک تازه</div>
+      </div>
+    </div>
+
+    <div class="item" data-name="کروسان بادام" data-price="۱۲۵,۰۰۰ تومان" data-desc="کروسان کره‌ای پخته‌شده به سبک فرانسوی، پر شده با کرم بادام و تزیین‌شده با ورقه‌های بادام برشته.">
+      <div class="item-icon">▤</div>
+      <div class="item-body">
+        <div class="item-top"><span class="item-name">کروسان بادام</span><span class="leader"></span><span class="item-price">۱۲۵,۰۰۰</span></div>
+        <div class="item-desc">کرم بادام، بادام برشته، خمیر کره‌ای فرانسوی</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="fname">کافه نوآر</div>
+  <p>خیابان ولیعصر، نرسیده به میدان &nbsp;·&nbsp; هر روز ۸ صبح تا ۱۱ شب<br>@cafenoir</p>
+</footer>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-icon" id="modalIcon">☕</div>
+    <h3 id="modalName"></h3>
+    <div class="modal-price" id="modalPrice"></div>
+    <p id="modalDesc"></p>
+  </div>
+</div>
+
+<script>
+  // Category nav filtering + scroll
+  const catBtns = document.querySelectorAll('.cat-btn');
+  const sections = document.querySelectorAll('.section');
+
+  catBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      catBtns.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.target).scrollIntoView({behavior:'smooth', block:'start', inline:'nearest'});
+    });
+  });
+
+  // Highlight nav on scroll
+  const navObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id = entry.target.id;
+        catBtns.forEach(b=>{
+          b.classList.toggle('active', b.dataset.target === id);
+        });
+      }
+    });
+  }, {rootMargin:'-40% 0px -50% 0px', threshold:0});
+  sections.forEach(s=>navObserver.observe(s));
+
+  // Reveal on scroll
+  const revealObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.15});
+  document.querySelectorAll('.section-head, .item').forEach(el=>revealObserver.observe(el));
+
+  // Modal
+  const overlay = document.getElementById('overlay');
+  const modalName = document.getElementById('modalName');
+  const modalPrice = document.getElementById('modalPrice');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalIcon = document.getElementById('modalIcon');
+
+  document.querySelectorAll('.item').forEach(item=>{
+    item.addEventListener('click', ()=>{
+      modalName.textContent = item.dataset.name;
+      modalPrice.textContent = item.dataset.price;
+      modalDesc.textContent = item.dataset.desc;
+      modalIcon.textContent = item.querySelector('.item-icon').textContent;
+      overlay.classList.add('show');
+    });
+  });
+
+  function closeModal(){ overlay.classList.remove('show'); }
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
+</script>
+
+</body>
+</html>
